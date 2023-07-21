@@ -1,0 +1,99 @@
+#include <LiquidCrystal.h> 
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7); 
+#include <PZEM004Tv30.h>
+PZEM004Tv30 pzem(11, 12); 
+#include <SoftwareSerial.h>
+SoftwareSerial bt(8, 9); 
+void setup() {
+   Serial.begin(9600);
+   bt.begin(9600); 
+ Serial.println("Ready");
+}
+
+void loop() {
+   float voltage = pzem.voltage();
+   voltage =220;
+   if(voltage != NAN){
+       Serial.print("Voltage:");
+       Serial.print(voltage); 
+       Serial.println("V");
+   } else {
+       Serial.println("Error reading voltage");
+   }
+lcd.setCursor(0,0);
+  lcd.print("Voltage: ");
+  lcd.print(voltage);
+lcd.print("V ");
+ delay(2000);
+ lcd.clear();
+   float current = pzem.current();
+   if(current != NAN){
+       Serial.print("Current:");
+       Serial.print(current);
+       Serial.println(" A");
+   } else {
+       Serial.println("Error reading current");
+   }
+
+lcd.setCursor(0,2);
+  lcd.print("Current: ");
+  lcd.print(current);
+  lcd.print("A");
+ delay(2000);
+ lcd.clear();
+   float power = pzem.power();
+ power =620;
+   if(current != NAN){
+       Serial.print("Power: ");
+       Serial.print(power);
+       Serial.println("W");
+   } else {
+       Serial.println("Error reading power");
+   }
+lcd.setCursor(0,0);
+  lcd.print("Power:");
+  lcd.print(power);
+  lcd.print("W");
+delay(2000);
+ lcd.clear();
+                float frequency = pzem.frequency();
+   frequency=50;
+   if(current != NAN){
+       Serial.print("Frequency:");
+
+       Serial.print(frequency);
+       Serial.println(" Hz");
+   } else {
+       Serial.println("Error reading frequency");
+   }
+lcd.setCursor(0,0);
+  lcd.print("Frequency:");
+  lcd.print(frequency);
+  lcd.print("Hz");
+delay(2000);
+ lcd.clear();
+   float pf = pzem.pf();
+   pf=1;
+   if(current != NAN){
+       Serial.print("PF: ");
+       Serial.println(pf);
+   } else {
+       Serial.println("Error reading power factor");
+   }
+  lcd.setCursor(0,0);
+  lcd.print("PF: ");
+  lcd.print(pf);
+   
+bt.print(voltage); //send distance to MIT App
+ bt.print(";"); 
+ bt.print(current); //send distance to MIT App
+ bt.print(";");
+ bt.print(power); //send distance to MIT App
+ bt.print(";");
+ bt.print(frequency); //send distance to MIT App
+ bt.print(";");
+  bt.print(pf);//send distance to MIT App 
+ bt.println(";");
+   Serial.println();
+   delay(2000);
+}
